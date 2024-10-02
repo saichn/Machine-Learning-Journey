@@ -1,3 +1,18 @@
+"""
+Linear Regression with PyTorch
+This project showcases the implementation and training of a simple Linear Regression model using PyTorch. Key elements include:
+
+Model Definition: A custom LinearRegression class with a single linear layer.
+
+Synthetic Data Generation: Creation of input data (X) and target data (Y) with added noise.
+
+Utility Functions: Methods for parameter extraction, model fit visualization, and training loss plotting.
+
+Training Process: Iterative optimization using Stochastic Gradient Descent (SGD) with Mean Squared Error (MSE) loss function.
+
+Visualizations: Initial, intermediate, and final model fits, along with training loss trends across epochs.
+"""
+
 import torch
 import torch.nn as nn
 import numpy as np
