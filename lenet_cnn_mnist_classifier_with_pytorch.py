@@ -1,28 +1,38 @@
 """
-### MNIST Digit Classification with PyTorch
+### Project Description: MNIST Digit Classification with LeNet
 
-This project implements a convolutional neural network (CNN) using PyTorch to classify handwritten digits from the MNIST dataset. The model is based on the LeNet architecture and is trained and evaluated on the MNIST dataset.
+This project involves building and training a convolutional neural network (CNN) using PyTorch to classify handwritten digits from the MNIST dataset. The model architecture is inspired by the LeNet-5 network, which is well-suited for image classification tasks.
 
-#### Key Features:
-- **Data Preprocessing**: The MNIST dataset is loaded and transformed, resizing images to 28x28 pixels, converting them to tensors, and normalizing them to the range [-1, 1].
-- **Model Architecture**: The LeNet model consists of two convolutional layers followed by max-pooling layers, a fully connected layer, and a dropout layer to prevent overfitting.
-- **Training and Evaluation**: The model is trained for 10 epochs using the Adam optimizer and CrossEntropyLoss. Training and test losses and accuracies are tracked and plotted.
-- **Visualization**: Helper functions are provided to display images, unnormalize images, and plot training and test curves. Incorrectly predicted images are also displayed after each epoch.
+#### Key Components:
 
-#### Code Highlights:
-- **Data Loading**: Efficient data loading using `torch.utils.data.DataLoader` for both training and test datasets.
-- **Model Definition**: Clear and modular definition of the LeNet model using PyTorch's `nn.Module`.
-- **Training Loop**: Comprehensive training loop with loss calculation, backpropagation, and optimizer steps.
-- **Evaluation**: Detailed evaluation with accuracy calculation and visualization of incorrectly predicted images.
+1. **Data Preparation**:
+   - **Transformations**: Images are resized to 28x28 pixels, converted to tensors, and normalized to the range [-1, 1].
+   - **Datasets**: The MNIST training and test datasets are loaded and transformed using `torchvision.datasets` and `torchvision.transforms`.
+   - **Data Loaders**: Data loaders are created for efficient batch processing during training and testing.
 
-#### Usage:
-1. **Install Dependencies**: Ensure you have PyTorch, torchvision, and matplotlib installed.
-2. **Run the Script**: Execute the script to train the model and visualize the results.
-3. **Modify and Experiment**: Feel free to modify the model architecture, hyperparameters, and data transformations to experiment with different configurations.
+2. **Model Architecture**:
+   - **Convolutional Layers**: Two convolutional layers with ReLU activation and max pooling.
+     - `conv1`: 1 input channel, 30 output channels, 5x5 kernel.
+     - `conv2`: 30 input channels, 50 output channels, 5x5 kernel.
+   - **Fully Connected Layers**: Two fully connected layers with dropout for regularization.
+     - `fc1`: 50*4*4 input features, 128 output features.
+     - `fc2`: 128 input features, 10 output features (one for each digit class).
 
-#### Example Output:
-- **Training and Test Curves**: Plots showing the loss and accuracy over epochs.
-- **Incorrect Predictions**: Visualization of incorrectly predicted images with their true and predicted labels.
+3. **Training and Evaluation**:
+   - **Loss Function**: Cross-entropy loss is used to measure the model's performance.
+   - **Optimizer**: Adam optimizer is employed for updating the model parameters.
+   - **Training Loop**: The model is trained for 10 epochs, with training and testing phases in each epoch.
+     - **Training Phase**: The model learns from the training data, and the loss and accuracy are recorded.
+     - **Testing Phase**: The model's performance is evaluated on the test data, and incorrectly predicted images are collected for analysis.
+
+4. **Visualization**:
+   - **Image Display**: Helper functions are provided to display images, including incorrectly predicted ones.
+   - **Training Curves**: Loss and accuracy curves for both training and testing phases are plotted to visualize the model's learning progress.
+
+5. **Device Utilization**:
+   - The model and data are moved to a GPU if available, ensuring faster computation.
+
+This project demonstrates the application of CNNs in image classification, providing a comprehensive workflow from data preprocessing to model evaluation and visualization.
 """
 
 import torch
@@ -124,6 +134,7 @@ for epoch in range(1, epochs + 1):
     test_loss, test_corrects = 0.0, 0.0
 
     # Training phase
+    model.train()
     for images, labels in train_loader:
         images, labels = images.to(device), labels.to(device)
         outputs = model(images)
@@ -138,6 +149,7 @@ for epoch in range(1, epochs + 1):
 
     # Testing phase
     incorrect_images, incorrect_preds, correct_labels = [], [], []
+    model.eval()
     with torch.no_grad():
         for images, labels in test_loader:
             images, labels = images.to(device), labels.to(device)
